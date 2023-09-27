@@ -36,8 +36,17 @@ class WolfGoatCabbage(Problem):
         return state == self.goal
 
     def result(self, state, action):
-        pass
-
+         ## Uppercase action indicates chosen character moves from left to right bank
+        ## Lowercase action indicates chosen character moves from right to left bank
+        print("Before: ", state)
+        print("Action: ", action)
+        for elems in action[0]:
+            if(elems.lower()):
+                state.add(elems.upper())
+            if(elems.upper()):
+                state.discard(elems)
+        return state
+    
     def actions(self, state):
         ## Uppercase values indicate entities are on the left bank
         ## Lowercase values indicate entities are on the right bank
@@ -63,7 +72,16 @@ class WolfGoatCabbage(Problem):
  
 if __name__ == '__main__':
     wgc = WolfGoatCabbage()
-    print(wgc.actions("C"))
+    test_state = {'F', 'W', 'C'}
+    test_action = ['FW']
+    test_state2 = {'W' , 'C'}
+    test_action2 = ['f']
+    #test 1
+    print(wgc.actions(test_state))
+    print("After", wgc.result(test_state, test_action))
+    #test 2
+    print(wgc.actions(test_state2))
+    print("After", wgc.result(test_state2, test_action2))
 
     """
     solution = depth_first_graph_search(wgc).solution()
