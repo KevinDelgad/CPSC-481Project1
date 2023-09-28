@@ -6,14 +6,27 @@ class WolfGoatCabbage(Problem):
         super().__init__(inital, goal)
 
     def leftBankActions(self, state, validActions):
-        returnActions = []
+        initialActions = []
+        returnAction = []
+        tempState = list(state)
         for elems in state:
             if(elems == "F"):
-                returnActions.append("F")
+                initialActions.append("F")
                 continue
-            returnActions.append("F" + elems)
+            initialActions.append("F" + elems)
 
-        return returnActions
+        for action in initialActions:
+            for char in action:
+                tempState.remove(char)
+
+            if (not all(x in tempState for x in ["W", "G"])):
+                if(not all(a in tempState for a in ["G", "C"])):
+                    returnAction.append(action)
+            tempState = list(state)
+
+        print("State", state)
+        print("Returned Actions", returnAction)
+        return returnAction
 
     def rightBankActions(self, state, validActions):
         returnActions = validActions
