@@ -2,7 +2,7 @@ from search import *
 # YOUR CODE GOES HERE
 
 class WolfGoatCabbage(Problem):
-    def __init__(self, inital = ('F', 'W', 'G', 'C'), goal = ()):
+    def __init__(self, inital = ('W', 'G', 'F', 'C'), goal = ()):
         super().__init__(inital, goal)
 
     def leftBankActions(self, state, validActions):
@@ -23,13 +23,12 @@ class WolfGoatCabbage(Problem):
                 if(not all(a in tempState for a in ["G", "C"])):
                     returnAction.append(action)
             tempState = list(state)
-
-        print("State", state)
-        print("Returned Actions", returnAction)
         return returnAction
 
     def rightBankActions(self, state, validActions):
+        tempRightBank = []
         returnActions = validActions
+        returnReturnActions= []
         for elems in state:
             pointerval = 0
             while pointerval != len(returnActions):
@@ -37,7 +36,24 @@ class WolfGoatCabbage(Problem):
                     returnActions.remove(returnActions[pointerval])                    
                     continue
                 pointerval += 1
-        return returnActions
+
+        for action in returnActions:
+            for char in action:
+                if(char not in tempRightBank):
+                    tempRightBank.append(char)
+
+        testingRightBank = list(tempRightBank)
+
+        for action in returnActions:
+            for char in action:
+                testingRightBank.remove(char)
+            if (not all(x in testingRightBank for x in ["w", "g"])):
+                if(not all(a in testingRightBank for a in ["g", "c"])):
+                    returnReturnActions.append(action)
+            testingRightBank = list(tempRightBank)
+
+
+        return returnReturnActions
 
 
     def goal_test(self, state):
@@ -78,6 +94,7 @@ class WolfGoatCabbage(Problem):
  
 if __name__ == '__main__':
     wgc = WolfGoatCabbage()
+    print(wgc.goal_test(()))
     solution = breadth_first_graph_search(wgc).solution()
     print(solution)
     solution = depth_first_graph_search(wgc).solution()
